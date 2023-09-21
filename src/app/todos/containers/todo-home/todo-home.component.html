@@ -1,0 +1,6 @@
+<todo-add></todo-add>
+<todo-list [todos]="incompletedTodos$"></todo-list>
+
+<p>Completed:{{ countOfCompletedTodos$ | async }}</p>
+<todo-list [todos]="completedTodos$"></todo-list>
+<button id="route" [routerLink]="['/detail']">Route</button>

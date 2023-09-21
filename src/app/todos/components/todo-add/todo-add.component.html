@@ -1,0 +1,11 @@
+<div>
+  <form [formGroup]="formAddTodo" (ngSubmit)="onAdd()">
+    <input
+      type="text"
+      class="mt-2"
+      placeholder="Type to add ToDo ..."
+      formControlName="title"
+    />
+    <button type="submit">Add</button>
+  </form>
+</div>
