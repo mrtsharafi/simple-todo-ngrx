@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Observable, tap } from 'rxjs';
 
@@ -13,7 +13,21 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./todo-list.component.scss'],
 })
 export class TodoListComponent implements OnInit {
-  @Input('todos') todos$!: Observable<Todo[]>;
+  @Input('todos') todos$!: Observable<(Todo | undefined)[]>;
+
+  @Output() delete: EventEmitter<number> = new EventEmitter<number>();
+  @Output() done: EventEmitter<Todo> = new EventEmitter<Todo>();
+  @Output() important: EventEmitter<Todo> = new EventEmitter<Todo>();
 
   ngOnInit(): void {}
+
+  onDelete(id: number) {
+    this.delete.emit(id);
+  }
+  onDone(todo: Todo) {
+    this.done.emit(todo);
+  }
+  onImportant(todo: Todo) {
+    this.important.emit(todo);
+  }
 }

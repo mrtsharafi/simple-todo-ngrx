@@ -4,9 +4,11 @@ import { map, switchMap, catchError, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 import { TodoService } from '../../services';
-import * as todoActions from '../actions/todos.action';
+import * as todoActions from '../actions/index';
 import { Todo } from '../../models/todo.interface';
 import * as fromRoot from '../../../store/index';
+import { select } from '@ngrx/store';
+import { state } from '@angular/animations';
 
 @Injectable()
 export class TodoEffects {
@@ -52,9 +54,9 @@ export class TodoEffects {
   deleteTodo$ = createEffect(() =>
     this.actions$.pipe(
       ofType(todoActions.deleteTodo),
-      map((action) => action.todo),
-      switchMap((todo: Todo) => {
-        return this.todoService.deleteTodo(todo.id).pipe(
+      map((action) => action.id),
+      switchMap((id: number) => {
+        return this.todoService.deleteTodo(id).pipe(
           tap(console.log),
           map((todo) => ({ type: todoActions.DELETE_TODO_SUCCESS, todo })),
           catchError((error) =>
@@ -67,7 +69,10 @@ export class TodoEffects {
   todoSuccessOperations$ = createEffect(() =>
     this.actions$.pipe(
       ofType(todoActions.editTodoSuccess, todoActions.deleteTodoSuccess),
-      map(() => fromRoot.Go({ payload: { path: ['/Todos'] } }))
+      map(() => {
+        //return todoActions.LoadTodos();
+        return fromRoot.Go({ payload: { path: ['/Todos'] } });
+      })
     )
   );
 }

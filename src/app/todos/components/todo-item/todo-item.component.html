@@ -1,4 +1,15 @@
-<p>todo-item works!</p>
-{{ todo.title }}
-<button (click)="onEdit()">Save Changes</button>
-<button (click)="onDelete()">Delete</button>
+<label (click)="activeEditMode()" [hidden]="editing" #titleLable>
+  {{ _todo.title }}
+</label>
+<form [formGroup]="form" (ngSubmit)="onEdit()">
+  <input
+    class="edit"
+    type="text"
+    #textInput
+    formControlName="title"
+    (blur)="updateText()"
+    [hidden]="!editing"
+  />
+  <button type="submit">Save Changes</button>
+  <button (click)="onDelete()">Delete</button>
+</form>

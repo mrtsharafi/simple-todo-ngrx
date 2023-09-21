@@ -1,2 +1,6 @@
 <p>todo-detail works!</p>
-<todo-item [todo]="(todo$ | async)!"></todo-item>
+<todo-item
+  (delete)="onDelete($event)"
+  (update)="onEdit($event)"
+  [todo]="(todo$ | async)!"
+></todo-item>

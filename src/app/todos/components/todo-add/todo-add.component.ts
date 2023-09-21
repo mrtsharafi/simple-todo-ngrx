@@ -1,8 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Store } from '@ngrx/store';
-import * as fromStore from '../../store';
 
 @Component({
   selector: 'todo-add',
@@ -12,7 +10,8 @@ import * as fromStore from '../../store';
   styleUrls: ['./todo-add.component.scss'],
 })
 export class TodoAddComponent {
-  constructor(private store: Store) {}
+  @Output() add = new EventEmitter<string>();
+  constructor() {}
 
   ngOnInit(): void {}
 
@@ -21,16 +20,7 @@ export class TodoAddComponent {
   });
 
   onAdd() {
-    this.store.dispatch(
-      fromStore.AddTodo({
-        todo: {
-          id: 0,
-          title: this.formAddTodo.controls.title.value!,
-          done: false,
-          important: false,
-        },
-      })
-    );
+    this.add.emit(this.formAddTodo.controls.title.value!);
     this.formAddTodo.controls.title.reset();
   }
 }

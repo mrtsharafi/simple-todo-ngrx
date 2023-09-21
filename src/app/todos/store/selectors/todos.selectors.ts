@@ -22,23 +22,23 @@ export const getTodos = createSelector(getTodoEntities, (entities) => {
 });
 
 export const getCompletedTodos = createSelector(getTodos, (entities) =>
-  entities.filter((x) => x.done === true)
+  entities.filter((x) => x!.done === true)
 );
 export const getCountOfCompletedTodos = createSelector(
   getTodos,
-  (entities) => entities.filter((x) => x.done === true).length
+  (entities) => entities.filter((x) => x!.done === true).length
 );
 export const getIncompletedTodos = createSelector(getTodos, (entities) =>
-  entities.filter((x) => x.done === false)
+  entities.filter((x) => x!.done === false)
 );
 export const getCountOfIncompletedTodos = createSelector(
   getTodos,
-  (entities) => entities.filter((x) => x.done === false).length
+  (entities) => entities.filter((x) => x!.done === false).length
 );
 export const getSelectedTodo = createSelector(
   getTodoEntities,
   fromRoot.getRouterState,
   (entities, router): Todo => {
-    return router.state && entities[router.state.params['todoId']];
+    return (router.state && entities[router.state.params['todoId']])!;
   }
 );

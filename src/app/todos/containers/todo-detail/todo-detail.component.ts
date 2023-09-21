@@ -20,4 +20,10 @@ export class TodoDetailComponent implements OnInit {
   ngOnInit(): void {
     this.todo$ = this.store.select(fromStore.getSelectedTodo);
   }
+  onEdit(todo: Todo) {
+    this.store.dispatch(fromStore.editTodo({ todo }));
+  }
+  onDelete(id: number) {
+    this.store.dispatch(fromStore.deleteTodo({ id }));
+  }
 }

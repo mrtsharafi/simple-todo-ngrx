@@ -2,18 +2,18 @@ import { createReducer, on } from '@ngrx/store';
 
 import * as fromTodos from '../actions/todos.action';
 import { Todo } from '../../models/todo.interface';
+import { EntityAdapter, EntityState, createEntityAdapter } from '@ngrx/entity';
 
-export interface TodoState {
-  entities: { [id: number]: Todo };
+export interface TodoState extends EntityState<Todo> {
   loaded: boolean;
   loading: boolean;
 }
+export const adapter: EntityAdapter<Todo> = createEntityAdapter<Todo>();
 
-export const initialState: TodoState = {
-  entities: {},
+export const initialState: TodoState = adapter.getInitialState({
   loaded: false,
   loading: false,
-};
+});
 
 export const reducer = createReducer(
   initialState,
@@ -24,47 +24,21 @@ export const reducer = createReducer(
       loading: true,
     };
   }),
-  on(fromTodos.LoadTodosSuccess, (state, action) => {
-    const todos = action.todos;
-    const entities = todos.reduce(
-      (entities: { [id: number]: Todo }, todo) => {
-        return {
-          ...entities,
-          [todo.id]: todo,
-        };
-      },
-      {
-        ...state.entities,
-      }
-    );
 
-    return {
-      ...state,
-      loaded: true,
-      loading: false,
-      entities,
-    };
+  on(fromTodos.LoadTodosSuccess, (state, { todos }) => {
+    return adapter.setAll(todos, { ...state, loaded: true, loading: false });
   }),
+
   on(fromTodos.LoadTodosFail, (state) => ({
     ...state,
     loaded: false,
     loading: false,
   })),
-  on(fromTodos.editTodoSuccess, fromTodos.AddTodoSuccess, (state, action) => {
-    const todo = action.todo;
-    const entities = { ...state.entities, [todo.id]: todo };
-
-    return {
-      ...state,
-      entities,
-    };
+  on(fromTodos.editTodoSuccess, fromTodos.AddTodoSuccess, (state, { todo }) => {
+    return adapter.upsertOne(todo, { ...state, loaded: true, loading: false });
   }),
-  on(fromTodos.deleteTodoSuccess, (state, action) => {
-    const todo = action.todo;
-    const { [todo.id]: deleted, ...entities } = state.entities;
-    console.log(action);
-    console.log({ ...state, entities });
 
-    return { ...state, entities };
+  on(fromTodos.deleteTodoSuccess, (state, { id }) => {
+    return adapter.removeOne(id, { ...state, loaded: true, loading: false });
   })
 );

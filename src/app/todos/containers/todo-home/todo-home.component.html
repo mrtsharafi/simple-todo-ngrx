@@ -1,6 +1,16 @@
-<todo-add></todo-add>
-<todo-list [todos]="incompletedTodos$"></todo-list>
+<todo-add (add)="onAdd($event)"></todo-add>
+<todo-list
+  (delete)="onDelete($event)"
+  (done)="onDone($event)"
+  (important)="onImportant($event)"
+  [todos]="incompletedTodos$"
+></todo-list>
 
 <p>Completed:{{ countOfCompletedTodos$ | async }}</p>
-<todo-list [todos]="completedTodos$"></todo-list>
+<todo-list
+  (delete)="onDelete($event)"
+  (done)="onDone($event)"
+  (important)="onImportant($event)"
+  [todos]="completedTodos$"
+></todo-list>
 <button id="route" [routerLink]="['/detail']">Route</button>
