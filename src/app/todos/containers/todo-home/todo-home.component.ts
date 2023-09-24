@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs/internal/Observable';
@@ -12,6 +12,7 @@ import { RouterModule } from '@angular/router';
   selector: 'todo-home',
   standalone: true,
   imports: [CommonModule, TodoAddComponent, TodoListComponent, RouterModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './todo-home.component.html',
   styleUrls: ['./todo-home.component.scss'],
 })
@@ -23,13 +24,11 @@ export class TodoHomeComponent implements OnInit {
   constructor(private store: Store) {}
 
   ngOnInit() {
-    this.store.dispatch(fromStore.LoadTodos());
-    this.incompletedTodos$ = this.store.pipe(
-      select(fromStore.getIncompletedTodos)
-    );
-    this.completedTodos$ = this.store.pipe(select(fromStore.getCompletedTodos));
-    this.countOfCompletedTodos$ = this.store.pipe(
-      select(fromStore.getCountOfCompletedTodos)
+    //this.store.dispatch(fromStore.LoadTodos());
+    this.incompletedTodos$ = this.store.select(fromStore.getIncompletedTodos);
+    this.completedTodos$ = this.store.select(fromStore.getCompletedTodos);
+    this.countOfCompletedTodos$ = this.store.select(
+      fromStore.getCountOfCompletedTodos
     );
   }
 

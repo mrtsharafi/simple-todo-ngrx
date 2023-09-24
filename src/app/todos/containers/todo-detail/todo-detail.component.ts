@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { Todo } from '../../models/todo.interface';
@@ -10,6 +10,7 @@ import { TodoItemComponent } from '../../components';
   selector: 'todo-detail',
   standalone: true,
   imports: [CommonModule, TodoItemComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './todo-detail.component.html',
   styleUrls: ['./todo-detail.component.scss'],
 })

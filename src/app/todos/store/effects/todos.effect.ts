@@ -7,8 +7,6 @@ import { TodoService } from '../../services';
 import * as todoActions from '../actions/index';
 import { Todo } from '../../models/todo.interface';
 import * as fromRoot from '../../../store/index';
-import { select } from '@ngrx/store';
-import { state } from '@angular/animations';
 
 @Injectable()
 export class TodoEffects {
@@ -70,7 +68,6 @@ export class TodoEffects {
     this.actions$.pipe(
       ofType(todoActions.editTodoSuccess, todoActions.deleteTodoSuccess),
       map(() => {
-        //return todoActions.LoadTodos();
         return fromRoot.Go({ payload: { path: ['/Todos'] } });
       })
     )

@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   EventEmitter,
@@ -17,6 +18,8 @@ import { Todo } from '../../models/todo.interface';
   selector: 'todo-item',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+
   templateUrl: './todo-item.component.html',
   styleUrls: ['./todo-item.component.scss'],
 })

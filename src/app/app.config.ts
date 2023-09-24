@@ -8,9 +8,11 @@ import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { environment } from '../environments/environment';
 import { routes } from './app.routes';
 import { reducers, effects, CustomSerializer } from './store';
+import * as fromGuards from '../app/todos/guards';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    fromGuards.TodoExistGuard,
     importProvidersFrom(
       RouterModule.forRoot(routes),
       StoreModule.forRoot(reducers),
