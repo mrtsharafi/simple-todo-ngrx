@@ -1,15 +1,49 @@
-<todo-add (add)="onAdd($event)"></todo-add>
-<todo-list
-  (delete)="onDelete($event)"
-  (done)="onDone($event)"
-  (important)="onImportant($event)"
-  [todos]="incompletedTodos$"
-></todo-list>
+<div class="container mt-3">
+  <todo-add (add)="onAdd($event)"></todo-add>
+  <todo-list
+    (delete)="openModal(template, $event)"
+    (done)="onDone($event)"
+    (important)="onImportant($event)"
+    [todos]="incompletedTodos$"
+  ></todo-list>
 
-<p>Completed:{{ countOfCompletedTodos$ | async }}</p>
-<todo-list
-  (delete)="onDelete($event)"
-  (done)="onDone($event)"
-  (important)="onImportant($event)"
-  [todos]="completedTodos$"
-></todo-list>
+  <ng-container *ngIf="countOfCompletedTodos$ | async">
+    <div class="mb-3 mt-3 show-completed-btn" (click)="toggelShow()">
+      <i
+        [ngClass]="{
+          fa: true,
+          'fa-chevron-right': !showCompleted,
+          'fa-chevron-down': showCompleted
+        }"
+      ></i>
+      Completed {{ countOfCompletedTodos$ | async }}
+    </div>
+  </ng-container>
+  <ng-container *ngIf="showCompleted">
+    <todo-list
+      (delete)="openModal(template, $event)"
+      (done)="onDone($event)"
+      (important)="onImportant($event)"
+      [todos]="completedTodos$"
+    ></todo-list>
+  </ng-container>
+</div>
+<ng-template #template>
+  <div class="modal-body text-center">
+    <p>Are you sure?</p>
+    <button
+      type="button"
+      class="btn btn-danger btn-sm"
+      (click)="onConfirmDelete(selectedId)"
+    >
+      Yes
+    </button>
+    <button
+      type="button"
+      class="btn btn-default btn-sm m-2"
+      (click)="decline()"
+    >
+      No
+    </button>
+  </div>
+</ng-template>

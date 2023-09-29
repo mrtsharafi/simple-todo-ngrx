@@ -5,7 +5,13 @@ import {
   Output,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 
 @Component({
   selector: 'todo-add',
@@ -17,12 +23,12 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 })
 export class TodoAddComponent {
   @Output() add = new EventEmitter<string>();
-  constructor() {}
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {}
 
-  formAddTodo = new FormGroup({
-    title: new FormControl(''),
+  formAddTodo = this.fb.group({
+    title: ['', [Validators.required]],
   });
 
   onAdd() {

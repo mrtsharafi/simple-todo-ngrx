@@ -1,12 +1,37 @@
 <div *ngFor="let todo of todos$ | async">
-  <span [class.done]="todo!.done" [class.important]="todo!.important">{{
-    todo!.title
-  }}</span>
-
-  <button [routerLink]="['/Todos/' + todo!.id]">Details</button>
-  <button (click)="onDelete(todo!.id)">delete</button>
-  <button (click)="onDone(todo!)">{{ todo!.done ? "undone" : "done" }}</button>
-  <button (click)="onImportant(todo!)">
-    {{ todo!.important ? "Normal" : "Important" }}
-  </button>
+  <div class="card mt-1">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-1 my-auto" (click)="onDone(todo!)">
+          <i
+            [ngClass]="{
+              'fa fa-lg': true,
+              'fa-circle-thin': !todo!.done,
+              'fa-check-circle': todo!.done
+            }"
+            aria-hidden="true"
+          ></i>
+        </div>
+        <div class="col-9" [routerLink]="['/Todos/' + todo!.id]">
+          <label
+            for="complete"
+            [ngClass]="{ 'form-check-label lead': true, done: todo!.done }"
+            >{{ todo!.title }}</label
+          >
+        </div>
+        <div class="col-1 my-auto" (click)="onImportant(todo!)">
+          <i
+            [ngClass]="{
+              'fa fa-lg': true,
+              'fa-star-o': !todo!.important,
+              'fa-star text-warning': todo!.important
+            }"
+          ></i>
+        </div>
+        <div class="col-1 my-auto">
+          <span class="fa fa-trash fa-lg" (click)="onDelete(todo!.id)"></span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

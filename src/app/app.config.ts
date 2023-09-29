@@ -9,6 +9,7 @@ import { environment } from '../environments/environment';
 import { routes } from './app.routes';
 import { reducers, effects, CustomSerializer } from './store';
 import * as fromGuards from '../app/todos/guards';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -17,6 +18,7 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(
       RouterModule.forRoot(routes),
       StoreModule.forRoot(reducers),
+      ModalModule.forRoot(),
       StoreDevtoolsModule.instrument({
         maxAge: 25,
         logOnly: environment.production,

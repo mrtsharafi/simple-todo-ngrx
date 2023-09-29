@@ -1,12 +1,18 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  TemplateRef,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Store, select } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/internal/Observable';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { RouterModule } from '@angular/router';
 
 import { Todo } from '../../models/todo.interface';
 import * as fromStore from '../../store';
 import { TodoListComponent, TodoAddComponent } from '../../components';
-import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'todo-home',
@@ -20,11 +26,24 @@ export class TodoHomeComponent implements OnInit {
   incompletedTodos$!: Observable<(Todo | undefined)[]>;
   completedTodos$!: Observable<(Todo | undefined)[]>;
   countOfCompletedTodos$!: Observable<number>;
+  selectedId!: number;
+  modalRef?: BsModalRef;
 
-  constructor(private store: Store) {}
+  constructor(private store: Store, private modalService: BsModalService) {}
+  showCompleted: boolean = false;
 
+  toggelShow() {
+    this.showCompleted = !this.showCompleted;
+    localStorage.setItem('showCompleted', JSON.stringify(this.showCompleted));
+  }
   ngOnInit() {
-    //this.store.dispatch(fromStore.LoadTodos());
+    if (localStorage.getItem('showCompleted')) {
+      this.showCompleted = JSON.parse(
+        localStorage.getItem('showCompleted')!
+      ) as boolean;
+    } else {
+      localStorage.setItem('showCompleted', JSON.stringify(this.showCompleted));
+    }
     this.incompletedTodos$ = this.store.select(fromStore.getIncompletedTodos);
     this.completedTodos$ = this.store.select(fromStore.getCompletedTodos);
     this.store
@@ -35,13 +54,17 @@ export class TodoHomeComponent implements OnInit {
     );
   }
 
-  onDelete(id: number) {
-    const confirmDelete = window.confirm('Are you sure?');
-    if (confirmDelete) {
-      this.store.dispatch(fromStore.deleteTodo({ id }));
-      this.store.dispatch(fromStore.LoadTodos());
-    }
+  openModal(template: TemplateRef<any>, id: number) {
+    this.selectedId = id;
+    this.modalRef = this.modalService.show(template, { class: 'modal-sm' });
   }
+
+  onConfirmDelete(id: number) {
+    this.store.dispatch(fromStore.deleteTodo({ id }));
+    this.store.dispatch(fromStore.LoadTodos());
+    this.modalRef?.hide();
+  }
+
   onDone(todo: Todo) {
     this.store.dispatch(
       fromStore.editTodo({ todo: { ...todo, done: !todo.done } })
@@ -65,5 +88,9 @@ export class TodoHomeComponent implements OnInit {
         },
       })
     );
+  }
+
+  decline(): void {
+    this.modalRef?.hide();
   }
 }

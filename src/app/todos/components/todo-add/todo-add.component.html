@@ -1,11 +1,21 @@
-<div>
-  <form [formGroup]="formAddTodo" (ngSubmit)="onAdd()">
-    <input
-      type="text"
-      class="mt-2"
-      placeholder="Type to add ToDo ..."
-      formControlName="title"
-    />
-    <button type="submit">Add</button>
-  </form>
+<div class="row mb-3 mt-3">
+  <div class="col-12">
+    <form [formGroup]="formAddTodo" (ngSubmit)="onAdd()">
+      <div class="input-group">
+        <input
+          class="form-control"
+          type="text"
+          placeholder="Type to add ToDo ..."
+          formControlName="title"
+        />
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="formAddTodo.invalid"
+        >
+          <i class="fa fa-arrow-down"></i>
+        </button>
+      </div>
+    </form>
+  </div>
 </div>
