@@ -42,16 +42,7 @@ export class TodoItemComponent implements OnInit {
   @ViewChild('textInput', { static: true }) textInput!: ElementRef;
   @ViewChild('titleLable', { static: true }) titleLable!: ElementRef;
 
-  constructor(private renderer: Renderer2) {
-    this.renderer.listen('window', 'click', (e: Event) => {
-      if (
-        e.target !== this.titleLable.nativeElement &&
-        e.target !== this.textInput.nativeElement
-      ) {
-        this.editing = false;
-      }
-    });
-  }
+  constructor(private renderer: Renderer2) {}
   ngOnInit(): void {}
   onEdit() {
     this.update.emit({ ...this._todo });
@@ -59,7 +50,9 @@ export class TodoItemComponent implements OnInit {
   onDelete() {
     const confirmDelete = window.confirm('Are you sure?');
     if (confirmDelete) {
-      this.delete.emit(this.todo.id);
+      console.log('delete:::' + this._todo.id);
+
+      this.delete.emit(this._todo.id);
     }
   }
   activeEditMode() {
@@ -71,6 +64,7 @@ export class TodoItemComponent implements OnInit {
   updateText() {
     if (this.form.controls.title.valid && this.editing) {
       this._todo = { ...this._todo, title: this.form.controls.title.value! };
+      this.editing = false;
     }
   }
 }

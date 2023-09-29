@@ -25,6 +25,9 @@ export class TodoDetailComponent implements OnInit {
     this.store.dispatch(fromStore.editTodo({ todo }));
   }
   onDelete(id: number) {
+    console.log('dis' + id);
+
     this.store.dispatch(fromStore.deleteTodo({ id }));
+    this.store.dispatch(fromStore.LoadTodos());
   }
 }

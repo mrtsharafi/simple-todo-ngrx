@@ -27,6 +27,9 @@ export class TodoHomeComponent implements OnInit {
     //this.store.dispatch(fromStore.LoadTodos());
     this.incompletedTodos$ = this.store.select(fromStore.getIncompletedTodos);
     this.completedTodos$ = this.store.select(fromStore.getCompletedTodos);
+    this.store
+      .select(fromStore.getTodoEntities)
+      .subscribe((val) => console.log(val));
     this.countOfCompletedTodos$ = this.store.select(
       fromStore.getCountOfCompletedTodos
     );

@@ -25,7 +25,6 @@ export class TodoExistGuard {
     return this.store.select(fromStore.getTodoEntities).pipe(
       map((entities: { [key: number]: Todo | undefined }) => {
         console.log(entities);
-        debugger;
         if (entities[id]) return true;
         return false;
       }),

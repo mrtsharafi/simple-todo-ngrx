@@ -13,6 +13,7 @@ import * as fromGuards from '../app/todos/guards';
 export const appConfig: ApplicationConfig = {
   providers: [
     fromGuards.TodoExistGuard,
+    fromGuards.guards,
     importProvidersFrom(
       RouterModule.forRoot(routes),
       StoreModule.forRoot(reducers),
