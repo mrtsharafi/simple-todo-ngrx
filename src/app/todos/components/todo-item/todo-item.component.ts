@@ -7,17 +7,19 @@ import {
   OnInit,
   Output,
   Renderer2,
+  TemplateRef,
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
-
+import { RouterModule } from '@angular/router';
 import { Todo } from '../../models/todo.interface';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'todo-item',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 
   templateUrl: './todo-item.component.html',
@@ -25,6 +27,7 @@ import { Todo } from '../../models/todo.interface';
 })
 export class TodoItemComponent implements OnInit {
   _todo!: Todo;
+  edited: boolean = false;
 
   @Input()
   set todo(todo: Todo) {
@@ -41,20 +44,16 @@ export class TodoItemComponent implements OnInit {
   editing: boolean = false;
   @ViewChild('textInput', { static: true }) textInput!: ElementRef;
   @ViewChild('titleLable', { static: true }) titleLable!: ElementRef;
-
-  constructor(private renderer: Renderer2) {}
+  modalRef?: BsModalRef;
+  constructor(
+    private renderer: Renderer2,
+    private modalService: BsModalService
+  ) {}
   ngOnInit(): void {}
   onEdit() {
     this.update.emit({ ...this._todo });
   }
-  onDelete() {
-    const confirmDelete = window.confirm('Are you sure?');
-    if (confirmDelete) {
-      console.log('delete:::' + this._todo.id);
 
-      this.delete.emit(this._todo.id);
-    }
-  }
   activeEditMode() {
     this.editing = true;
     setTimeout(() => {
@@ -63,8 +62,25 @@ export class TodoItemComponent implements OnInit {
   }
   updateText() {
     if (this.form.controls.title.valid && this.editing) {
+      if (this.form.controls.title.value! !== this._todo.title) {
+        this.edited = true;
+      }
       this._todo = { ...this._todo, title: this.form.controls.title.value! };
       this.editing = false;
     }
+  }
+  openModal(template: TemplateRef<any>, e: MouseEvent) {
+    e.stopPropagation();
+    e.preventDefault();
+    this.modalRef = this.modalService.show(template, { class: 'modal-sm' });
+  }
+
+  onConfirmDelete() {
+    this.modalRef?.hide();
+    this.delete.emit(this._todo.id);
+  }
+
+  decline(): void {
+    this.modalRef?.hide();
   }
 }

@@ -1,15 +1,52 @@
-<label (click)="activeEditMode()" [hidden]="editing" #titleLable>
-  {{ _todo.title }}
-</label>
-<form [formGroup]="form" (ngSubmit)="onEdit()">
-  <input
-    class="edit"
-    type="text"
-    #textInput
-    formControlName="title"
-    (blur)="updateText()"
-    [hidden]="!editing"
-  />
-  <button type="submit">Save Changes</button>
-</form>
-<button (click)="onDelete()">Delete</button>
+<button class="btn btn-back" [routerLink]="['/Todos']">
+  <strong><i class="fa fa-chevron-left"></i> Back</strong>
+</button>
+<div class="card mt-3">
+  <div class="card-header">Click on title to change it!</div>
+  <div class="card-body">
+    <label
+      class="title mb-3"
+      (click)="activeEditMode()"
+      [hidden]="editing"
+      #titleLable
+    >
+      {{ _todo.title }}
+    </label>
+    <form [formGroup]="form" (ngSubmit)="onEdit()">
+      <input
+        class="edit form-control mb-3"
+        type="text"
+        #textInput
+        formControlName="title"
+        (blur)="updateText()"
+        [hidden]="!editing"
+      />
+      <button
+        class="btn btn-outline-danger btn-sm m-2"
+        (click)="openModal(template, $event)"
+      >
+        Delete
+      </button>
+      <button type="submit" class="btn btn-success btn-sm">Save Changes</button>
+    </form>
+  </div>
+</div>
+<ng-template #template>
+  <div class="modal-body text-center">
+    <p>Are you sure?</p>
+    <button
+      type="button"
+      class="btn btn-danger btn-sm"
+      (click)="onConfirmDelete()"
+    >
+      Yes
+    </button>
+    <button
+      type="button"
+      class="btn btn-default btn-sm m-2"
+      (click)="decline()"
+    >
+      No
+    </button>
+  </div>
+</ng-template>
